@@ -15,8 +15,9 @@ db.once("open",()=>{
 })
 app.use(express.json())
 app.use(cors())
+const AdminRoutes = require("./users routes/adminroutes")
 const usersRoutes = require("./users routes/usersroutes")
-
+app.use("/Admin",AdminRoutes)
 app.use("/Auth",usersRoutes)
 app.listen(process.env.PORT_NUM,()=>{
     console.log("Server Active and Listening")
