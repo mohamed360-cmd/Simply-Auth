@@ -24,6 +24,9 @@ export default function UserList(){
             console.log("Error in the getAllUsers function",error)
         }
     }
+    const downgradeUserHandler = async(user)=>{
+        console.log(user)
+    }
     useEffect(()=>{
         getAllUsers()
     },[])
@@ -31,7 +34,7 @@ export default function UserList(){
         <div className="userlistMainContainerMaster">
         <div>
             <h3>User  System Count {userList.length}</h3>
-        </div>
+        </div>                                                                                                          
         <div className="userlistMainContainer">
                   {userList.length > 0 && userList.map(user => {
             return(
@@ -40,9 +43,14 @@ export default function UserList(){
                     <p className="userName">Name {user.Name}</p>
                     <p className="userSubStatus">subscription Tier{user.subscriptionStatus}</p>
                     <div className="ActionContainer">
-                        <button className="ActionBtn Delete">Delete</button>
-                        <button className="ActionBtn Upgrade">Upgrade</button>
-                        <button className="ActionBtn Downgrade">Downgrade</button>
+                        <button className="ActionBtn Delete">Delete user</button>
+                        {
+                            user.subscriptionStatus == "Free" && <button className="ActionBtn Upgrade">Upgrade</button>
+                        }
+                        {
+                            user.subscriptionStatus == "Premium" &&  <button className="ActionBtn Downgrade" onClick={() => downgradeUserHandler(user)}>Downgrade</button>
+                        }
+                       
                     </div>
                 </div>
             )

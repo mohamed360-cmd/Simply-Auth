@@ -1,9 +1,19 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import UserList from "./UserlistContainer"
 import "./Home.css"
-export default function Home(){
+import { useNavigate } from "react-router-dom"
+export default function Home({isLogedin}){
+    const navigator = useNavigate()
     const [showUserListView,setShowUserListView] = useState(true)
-    
+    const checkIfUserIsLogedIn = ()=>{
+        if(!sessionStorage.getItem("isLogedin")){
+            navigator("/")
+        }
+        
+    }
+    useEffect(()=>{
+    checkIfUserIsLogedIn()
+    },[])
     return(
         <div className="MainHomeContainer">
             <div className="displayContainer">

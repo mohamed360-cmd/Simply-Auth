@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import "./login.css"
+import { useNavigate } from "react-router-dom"
 export default function Login({setIslogedIn}){
+const navigation = useNavigate()
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [errorMessage,setErrorMessage] = useState("")
@@ -17,7 +19,9 @@ export default function Login({setIslogedIn}){
             const data = await res.json()
             if(data.status){
                 sessionStorage.setItem("JWT_Token",data.jwtToken)
-                setIslogedIn(data.status)
+                sessionStorage.setItem("isLogedin",true)
+                setIslogedIn(true)
+                navigation("/home")
             }else{
                 setErrorMessage(data.msg)
                 setShowErrorMessage(true)

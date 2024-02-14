@@ -8,7 +8,7 @@ export default function App(){
     <div style={{height : "100%",width : "100%"}}>
     <Routes>
       <Route path="/"  element={<Login setIslogedIn={setIslogedIn}/>} />
-      <Route path="/Home" element={<Home/>}/>
+      <Route path="/Home" element={<Home isLogedin={isLogedin}/>}/>
     </Routes>
     </div>
   )
