@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react"
 import "./Home.css"
 import SuccessMessage from "../Notifications/Success"
-export default function Home({userName,subscriptionStatus,setuserName,setSubscriptionStatus,setIsUserLogedin}){
+export default function Home({setIsUserLogedin}){
     const [blogs,setBlogs] = useState([])
     const [refreshScreen,setRefreshScreen] = useState(false)
     const jwtToken = sessionStorage.getItem("jwtToken")
     const [showSuccessMessage,setShowSuccessMessage] = useState(false)
     const [successesMsg,setSuccessmsg] = useState("")
+    const [userName,setUserName] = useState("")
+    const [subscriptionStatus,setSubscriptiontier] = useState("")
     const getBlogs = async(JTWTOKEN)=>{
         try {
             
@@ -24,6 +26,10 @@ export default function Home({userName,subscriptionStatus,setuserName,setSubscri
             console.log("Error in the getBlogs function",error)
         }
     }
+    const getUserDetails = ()=>{
+        setSubscriptiontier(sessionStorage.getItem("subscriptionTier"))
+        setUserName(sessionStorage.getItem("userName"))
+    }
     const upgradePremiumBtnHnalder = async()=>{
         try {
             const JWTToken = sessionStorage.getItem("jwtToken")
@@ -37,9 +43,7 @@ export default function Home({userName,subscriptionStatus,setuserName,setSubscri
             })
             const data = await res.json()
             console.log(data)
-            setuserName(data.Name)
             setSuccessmsg(data.msg)
-            setSubscriptionStatus(data.subscriptionTier)
             sessionStorage.setItem("jwtToken",data.newjwtToken)
             getBlogs(jwtToken)
             setShowSuccessMessage(true)
@@ -62,6 +66,7 @@ export default function Home({userName,subscriptionStatus,setuserName,setSubscri
     useEffect(()=>{
         getBlogs(jwtToken)
         updateUrl()
+        getUserDetails()
     },[refreshScreen])
     return(
         <div className="MainHomeContainer">

@@ -31,7 +31,9 @@ export default function Login({setShowRegisterFrom,setShowLoginForm,showErrorMsg
                 setShowErrorMsg(false)
                 setIsUserLogedin(true)
                 setuserName(data.functionResult.Name)
+                sessionStorage.setItem("userName",data.functionResult.Name)
                 setSubscriptionStatus(data.functionResult.subscriptionTier)
+                sessionStorage.setItem("subscriptionTier",data.functionResult.subscriptionTier)
                 sessionStorage.setItem("jwtToken",data.functionResult.jwtToken)
                 sessionStorage.setItem("logedin",data.status)
             }else{
