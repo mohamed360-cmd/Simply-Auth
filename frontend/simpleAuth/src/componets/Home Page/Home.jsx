@@ -56,8 +56,12 @@ export default function Home({userName,subscriptionStatus,setuserName,setSubscri
         sessionStorage.clear()
         setIsUserLogedin(false)
     }
+    const updateUrl = ()=>{
+        window.history.pushState({},"","/Home")
+    }
     useEffect(()=>{
         getBlogs(jwtToken)
+        updateUrl()
     },[refreshScreen])
     return(
         <div className="MainHomeContainer">
@@ -65,10 +69,10 @@ export default function Home({userName,subscriptionStatus,setuserName,setSubscri
                 <h3> Simply Read</h3>
                 <div className="navInfoContainer">
                     <div className="avaterContainer">
-                        <span className="avaterText">{userName[0].toUpperCase()}</span>
+                        <span className="avaterText">{ userName == "" ? "Null" :userName[0].toUpperCase()}</span>
                     </div>
-                    <p className="navbarInfoText">{userName}</p>
-                    <p className="navbarInfoText plan">Plan : {subscriptionStatus}</p>
+                    <p className="navbarInfoText">{userName == "" ? "Null" :userName}</p>
+                    <p className="navbarInfoText plan">Plan : {subscriptionStatus == "" ? "Null" : subscriptionStatus}</p>
                     <button className="logoutbtn" onClick={logoutbtnHandler}>Logout</button>
                 </div>
                 
