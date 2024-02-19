@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState,useContext } from "react"
 import "./Home.css"
 import SuccessMessage from "../Notifications/Success"
 import { useNavigate } from "react-router-dom"
-export default function Home({setIsUserLogedin}){
+import { UserContext } from "../../App"
+export default function Home(){
+    const [setIsUserLogedin,isUserLogedin] = useContext(UserContext)
     const navigate = useNavigate()
     const [blogs,setBlogs] = useState([])
     const [refreshScreen,setRefreshScreen] = useState(false)

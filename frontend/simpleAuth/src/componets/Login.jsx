@@ -1,14 +1,18 @@
 import "./Auth.css"
 import dotenv from 'dotenv'
-import { useState } from "react"
+import { useState,useContext } from "react"
 import ErrorMessage from "./Notifications/Error"
 import SuccessMessage from "./Notifications/Success"
-export default function Login({setShowRegisterFrom,setShowLoginForm,showErrorMsg,setShowErrorMsg,setShowSuccessMsg,showSuccessMsg,setIsUserLogedin,setuserName,setSubscriptionStatus}){
+import UserContext from "../App"
+import { FormContext } from "./MainAuth"
+export default function Login(){
+    const [setShowRegisterFrom,setShowLoginForm,showErrorMsg,setShowErrorMsg,setShowSuccessMsg,showSuccessMsg,setIsUserLogedin] = useContext(FormContext)
+   //const [isUserLogedin,setIsUserLogedin] = useState()
     const [email,setEmail]  = useState("")
     const [password,setPassword] = useState("")
     const [errorMsg,setErrorMsg] = useState("")
     const [successMessage,setSucccessMessage] = useState("")
-
+    const [enableLoginBtn,setEnableLoginBtn] = useState(true)
     const showregisterFormHandler = ()=>{
         setShowRegisterFrom(true)
         setShowLoginForm(false)
@@ -16,6 +20,7 @@ export default function Login({setShowRegisterFrom,setShowLoginForm,showErrorMsg
 
     const sendAuthDetailsHandler = async(authDetails)=>{
         try {
+            setEnableLoginBtn(false)
             const res = await fetch("http://localhost:3030/Auth/login",{
                 method : "POST",
                 headers : {
@@ -24,15 +29,13 @@ export default function Login({setShowRegisterFrom,setShowLoginForm,showErrorMsg
                 body : JSON.stringify(authDetails)
             })
             const data = await res.json()
-            console.log(data)
+            setEnableLoginBtn(true)
             if(data.status){
                 setSucccessMessage(data.msg)
                 setShowSuccessMsg(true)
                 setShowErrorMsg(false)
                 setIsUserLogedin(true)
-                setuserName(data.functionResult.Name)
                 sessionStorage.setItem("userName",data.functionResult.Name)
-                setSubscriptionStatus(data.functionResult.subscriptionTier)
                 sessionStorage.setItem("subscriptionTier",data.functionResult.subscriptionTier)
                 sessionStorage.setItem("jwtToken",data.functionResult.jwtToken)
                 sessionStorage.setItem("logedin",data.status)
@@ -73,7 +76,8 @@ export default function Login({setShowRegisterFrom,setShowLoginForm,showErrorMsg
             <button className="sendAuthDetailsButton primary" onClick={loginbtnHandler}>Login</button>
             <p className="forgotPasswordLink">Forgot password</p>
             <p className="infoText">Dont have and account ?</p>
-            <button className="sendAuthDetailsButton secondary" onClick={showregisterFormHandler}>Register</button>
+            {enableLoginBtn && <button className="sendAuthDetailsButton secondary"  enabled onClick={showregisterFormHandler}>Register</button> }
+            {!enableLoginBtn && <button className="sendAuthDetailsButton secondary" disabled onClick={showregisterFormHandler}>Register</button> }
             {showErrorMsg && <ErrorMessage message={errorMsg} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closesErrorMsgHandler}>X</button>}/>}
             {showSuccessMsg && <SuccessMessage message={successMessage} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closeSuccessMsgHandler}>X</button>}/> }
 

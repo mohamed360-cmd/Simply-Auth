@@ -1,10 +1,13 @@
-import { useState } from "react"
+import { createContext, useState ,useContext} from "react"
 import Login from "./Login"
 import Register from "./Register"
 import "./Auth.css"
 import SuccessMessage from "./Notifications/Success"
 import { useEffect } from "react"
-export default function MainAuth({setIsUserLogedin,setuserName,setSubscriptionStatus}){
+import { UserContext } from "../App"
+export const FormContext = createContext()
+export default function MainAuth(){
+    const [setIsUserLogedin,isUserLogedin] = useContext(UserContext)
     const [showSuccessMsg,setShowSuccessMsg] = useState(false)
     const [showErrorMsg,setShowErrorMsg] = useState(false)
     const [showLoginForm,setShowLoginForm] = useState(true)
@@ -20,13 +23,17 @@ export default function MainAuth({setIsUserLogedin,setuserName,setSubscriptionSt
         appendUrl()
     },[showLoginForm,showRegisterForm])
     return(
+<FormContext.Provider value={[setShowRegisterFrom, setShowLoginForm, showErrorMsg, setShowErrorMsg, setShowSuccessMsg, showSuccessMsg, setIsUserLogedin]}>
+
+        
         <div className="MainAuthcontainer">
             {
-                showLoginForm && <Login setShowRegisterFrom={setShowRegisterFrom} setShowLoginForm={setShowLoginForm} showErrorMsg={showErrorMsg}  setShowErrorMsg={setShowErrorMsg} setShowSuccessMsg={setShowSuccessMsg} showSuccessMsg={showSuccessMsg} setIsUserLogedin={setIsUserLogedin} setuserName={setuserName} setSubscriptionStatus={setSubscriptionStatus}/>
+                showLoginForm && <Login />
             }
             {
-                showRegisterForm && <Register setShowLoginForm={setShowLoginForm} setShowRegisterFrom={setShowRegisterFrom} setShowSuccessMsg={setShowSuccessMsg} showSuccessMsg={showSuccessMsg} showErrorMsg={showErrorMsg}  setShowErrorMsg={setShowErrorMsg}/>
+                showRegisterForm && <Register/>
             }
         </div>
+        </FormContext.Provider>
     )
 }

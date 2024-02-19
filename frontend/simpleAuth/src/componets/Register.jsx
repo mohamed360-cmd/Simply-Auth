@@ -1,7 +1,11 @@
-import { useState } from "react"
+import { useState,useContext } from "react"
 import SuccessMessage from "./Notifications/Success"
 import ErrorMessage from "./Notifications/Error"
-export default function Register({setShowLoginForm,setShowRegisterFrom,setShowSuccessMsg,showSuccessMsg,showErrorMsg,setShowErrorMsg}){
+import { FormContext } from "./MainAuth"
+
+export default function Register(){
+    const [setShowRegisterFrom,setShowLoginForm,showErrorMsg,setShowErrorMsg,setShowSuccessMsg,showSuccessMsg,setIsUserLogedin] = useContext(FormContext)
+
     const showLoginFormHandler = ()=>{
         setShowLoginForm(true)
         setShowRegisterFrom(false)
