@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import "./Home.css"
 import SuccessMessage from "../Notifications/Success"
+import { useNavigate } from "react-router-dom"
 export default function Home({setIsUserLogedin}){
+    const navigate = useNavigate()
     const [blogs,setBlogs] = useState([])
     const [refreshScreen,setRefreshScreen] = useState(false)
     const jwtToken = sessionStorage.getItem("jwtToken")
@@ -59,13 +61,14 @@ export default function Home({setIsUserLogedin}){
     const logoutbtnHandler = ()=>{
         sessionStorage.clear()
         setIsUserLogedin(false)
+        navigate("/")
     }
     const updateUrl = ()=>{
         window.history.pushState({},"","/Home")
     }
     useEffect(()=>{
         getBlogs(jwtToken)
-        updateUrl()
+       // updateUrl()
         getUserDetails()
     },[refreshScreen])
     return(
