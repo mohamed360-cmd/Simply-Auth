@@ -2,10 +2,10 @@ import { useEffect,useState } from "react"
 
 export default function UserList(){
     const [userList,setUserList] = useState([])
+    const [showLoadingScreen,setShowLoadingScreen] = useState(false)
     const getAllUsers = async ()=>{
-        
-
         const jwtToken = sessionStorage.getItem("JWT_Token")
+        setShowLoadingScreen(true)
         try {
             const res  = await fetch("http://localhost:3030/Admin/getUsers",{
                 method : "GET",
@@ -14,7 +14,7 @@ export default function UserList(){
                 }
             })
             const data = await res.json()
-            console.log(data)
+            setShowLoadingScreen(false)
             if(data.status){
                 setUserList(data.userArray)
             }else{
@@ -36,9 +36,10 @@ export default function UserList(){
             <h3>User  System Count {userList.length}</h3>
         </div>                                                                                                          
         <div className="userlistMainContainer">
+        {showLoadingScreen && <div>Loading users Please Wait </div>}
                   {userList.length > 0 && userList.map(user => {
             return(
-                <div className="userContainer">
+                <div className="userContainer" key={user._id}>
                     <p className="userEmail">Email {user.Email}</p>
                     <p className="userName">Name {user.Name}</p>
                     <p className="userSubStatus">subscription Tier{user.subscriptionStatus}</p>

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import "./login.css"
 import { useNavigate } from "react-router-dom"
-export default function Login({setIslogedIn}){
+import { UserContext } from "../../App"
+export default function Login(){
 const navigation = useNavigate()
+    const [isLogedin,setIslogedIn] = useContext(UserContext)
     const [email,setEmail] = useState("")
     const [password,setPassword] = useState("")
     const [errorMessage,setErrorMessage] = useState("")

@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import UserList from "./UserlistContainer"
 import "./Home.css"
 import { useNavigate } from "react-router-dom"
-export default function Home({isLogedin}){
+import { UserContext } from "../../App"
+export default function Home(){
+    const [isLogedin,setIslogedIn] = useContext(UserContext)
     const navigator = useNavigate()
     const [showUserListView,setShowUserListView] = useState(true)
     const checkIfUserIsLogedIn = ()=>{
@@ -10,6 +12,11 @@ export default function Home({isLogedin}){
             navigator("/")
         }
         
+    }
+    const logoutHandler = ()=>{
+        setIslogedIn(false)
+        sessionStorage.clear()
+        navigator("/")
     }
     useEffect(()=>{
     checkIfUserIsLogedIn()
@@ -19,7 +26,7 @@ export default function Home({isLogedin}){
             <div className="displayContainer">
                 <div className="sideOptionContainer">
                     <button className="optionBtns userlist ">User List</button>
-                    <button className="optionBtns logout">Logout</button>
+                    <button className="optionBtns logout" onClick={logoutHandler}>Logout</button>
                 </div>
                 <div className="infoDisplayContainer">
                     {showUserListView && <UserList/>}
