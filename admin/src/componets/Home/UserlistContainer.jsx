@@ -3,6 +3,7 @@ import { useEffect,useState } from "react"
 export default function UserList(){
     const [userList,setUserList] = useState([])
     const [showLoadingScreen,setShowLoadingScreen] = useState(false)
+    const [refreshPage,setrefreshPage] = useState(0)
     const getAllUsers = async ()=>{
         const jwtToken = sessionStorage.getItem("JWT_Token")
         setShowLoadingScreen(true)
@@ -24,12 +25,54 @@ export default function UserList(){
             console.log("Error in the getAllUsers function",error)
         }
     }
+
     const downgradeUserHandler = async(user)=>{
-        console.log(user)
+        try {
+            const jwtToken = sessionStorage.getItem("JWT_Token")
+            const res = await fetch("http://localhost:3030/Admin/Downgrade",{
+                method : "POST",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `Bearer${jwtToken}`
+                },
+                body : JSON.stringify(user)
+            })
+            const data = await res.json()
+            console.log(data)
+            if(data.status){
+                setrefreshPage(refreshPage + 1)
+            }else{
+                setrefreshPage(refreshPage + 1)
+            }
+        } catch (error) {
+            console.log("Error in the downgradeUserHandler ",error)
+        }
+    }
+    const upgradehandler = async(user)=>{
+        try {
+            const jwtToken = sessionStorage.getItem("JWT_Token")
+            const res = await fetch("http://localhost:3030/Admin/Upgrade",{
+                method : "POST",
+                headers : {
+                    "content-type" : "application/json",
+                    "authorization" : `Bearer${jwtToken}`
+                },
+                body : JSON.stringify(user)
+            })
+            const data = await res.json()
+            console.log(data)
+            if(data.status){
+                setrefreshPage(refreshPage + 1)
+            }else{
+                setrefreshPage(refreshPage + 1)
+            }
+        } catch (error) {
+            console.log("Error in the upgradehandler ",error)
+        }
     }
     useEffect(()=>{
         getAllUsers()
-    },[])
+    },[refreshPage])
     return(
         <div className="userlistMainContainerMaster">
         <div>
@@ -42,11 +85,12 @@ export default function UserList(){
                 <div className="userContainer" key={user._id}>
                     <p className="userEmail">Email {user.Email}</p>
                     <p className="userName">Name {user.Name}</p>
-                    <p className="userSubStatus">subscription Tier{user.subscriptionStatus}</p>
+                    <p>Authenication Method : {user.authMethod}</p>
+                    <p className="userSubStatus">subscription Tier {user.subscriptionStatus}</p>
                     <div className="ActionContainer">
                         <button className="ActionBtn Delete">Delete user</button>
                         {
-                            user.subscriptionStatus == "Free" && <button className="ActionBtn Upgrade">Upgrade</button>
+                            user.subscriptionStatus == "Free" && <button className="ActionBtn Upgrade" onClick={() => upgradehandler(user)}>Upgrade</button>
                         }
                         {
                             user.subscriptionStatus == "Premium" &&  <button className="ActionBtn Downgrade" onClick={() => downgradeUserHandler(user)}>Downgrade</button>

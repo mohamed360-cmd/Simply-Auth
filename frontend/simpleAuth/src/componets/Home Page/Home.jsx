@@ -4,7 +4,7 @@ import SuccessMessage from "../Notifications/Success"
 import { useNavigate } from "react-router-dom"
 import { UserContext } from "../../App"
 export default function Home(){
-    const [setIsUserLogedin,isUserLogedin] = useContext(UserContext)
+    const [setIsUserLogedin,isUserLogedin,profilePhoto] = useContext(UserContext)
     const navigate = useNavigate()
     const [blogs,setBlogs] = useState([])
     const [refreshScreen,setRefreshScreen] = useState(false)
@@ -49,6 +49,7 @@ export default function Home(){
             console.log(data)
             setSuccessmsg(data.msg)
             sessionStorage.setItem("jwtToken",data.newjwtToken)
+            sessionStorage.setItem("subscriptionTier",data.subscriptionTier)
             getBlogs(jwtToken)
             setShowSuccessMessage(true)
             setRefreshScreen(true)
@@ -79,7 +80,9 @@ export default function Home(){
                 <h3> Simply Read</h3>
                 <div className="navInfoContainer">
                     <div className="avaterContainer">
-                        <span className="avaterText">{ userName == "" ? "Null" :userName[0].toUpperCase()}</span>
+                 <span className="avaterText">{ userName == "" ? "Null" :userName[0].toUpperCase()}</span> 
+            
+                        
                     </div>
                     <p className="navbarInfoText">{userName == "" ? "Null" :userName}</p>
                     <p className="navbarInfoText plan">Plan : {subscriptionStatus == "" ? "Null" : subscriptionStatus}</p>

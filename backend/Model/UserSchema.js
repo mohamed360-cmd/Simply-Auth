@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-const userSchema =new  mongoose.Schema({
+const userSchema = new  mongoose.Schema({
     
     Name : {
         require : true,
@@ -16,7 +16,12 @@ const userSchema =new  mongoose.Schema({
     subscriptionStatus : {
         require : true,
         type : String
-    }
+    },
+    authMethod : {
+        require : true,
+        type : String
+    },
+    profilePhoto : String
 })
 const blogSchema = new mongoose.Schema({
     author  : {

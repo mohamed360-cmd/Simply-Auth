@@ -88,18 +88,70 @@ try {
     if(emailChechkResult.status){
        const userList = await getAllUserslist()
         res.json({
-            msg : "received the request from the Amdin",
+            msg : "received the request from the Admin",
             status : true,
             userArray : userList
     })
     }else{
         res.json({
-            msg : "Action Not Pemited ",
+            msg : "Action Not Permited ",
             status : false
         })
     }
 } catch (error) {
     
 }
+})
+routes.post("/Downgrade",async (req,res)=>{
+    const jwtToken = req.headers.authorization.replace("Bearer","")
+    const jwtTokenVerificationResult =  jwt.verify(jwtToken,process.env.SECRET_KEY)
+    const emailChechkResult = await checkIfEmailExist(jwtTokenVerificationResult.Email)
+    if(emailChechkResult.status){
+        const user = await userModel.findById(req.body._id)
+        if(!user){
+            console.log("User Does not Exist ")
+            res.status(201).json({
+                msg : "Downgrade Failer",
+                status : false
+            })
+        }else{
+           const updatedRecord =  await user.updateOne({"subscriptionStatus": "Free"})
+           res.status(201).json({
+            msg : "Downgrade Success",
+            status : true
+           })
+        }
+    }else{
+        res.status(201).json({
+            msg : "Downgrade Failer",
+            status : false
+        })
+    }
+})
+routes.post("/Upgrade",async (req,res)=>{
+    const jwtToken = req.headers.authorization.replace("Bearer","")
+    const jwtTokenVerificationResult =  jwt.verify(jwtToken,process.env.SECRET_KEY)
+    const emailChechkResult = await checkIfEmailExist(jwtTokenVerificationResult.Email)
+    if(emailChechkResult.status){
+        const user = await userModel.findById(req.body._id)
+        if(!user){
+            console.log("User Does not Exist ")
+            res.status(201).json({
+                msg : "Upgrade Failer",
+                status : false
+            })
+        }else{
+           const updatedRecord =  await user.updateOne({"subscriptionStatus": "Premium"})
+           res.status(201).json({
+            msg : "Upgrade Success",
+            status : true
+           })
+        }
+    }else{
+        res.status(201).json({
+            msg : "Upgrade Failer",
+            status : false
+        })
+    }
 })
 module.exports = routes

@@ -8,9 +8,9 @@ const checkIfUserExist = async(email)=>{
     try {
         const checkResult = await userModel.find({Email : email})
         if(checkResult.length >= 1){
-            return {status : true}// if true the user already exist 
+            return {status : true, dataResponse : checkResult}// if true the user already exist 
         }else{
-            return { status : false}//if false the user does not exist 
+            return { status : false , dataResponse : null}//if false the user does not exist 
         }
     } catch (error) {  
         console.log("Error in CheckIfUserExist Function",error)
@@ -114,12 +114,12 @@ routes.post("/register",async(req,res)=>{
     }else{
         const salt = await bcrypt.genSalt(12)
         const hashedPassword = await bcrypt.hash(Password,salt)
-        console.log(hashedPassword)
         const newUser = await userModel.create({
             Name: Name,
             Email : Email,
             Password : hashedPassword,
-            subscriptionStatus : 'Free'
+            subscriptionStatus : 'Free',
+            authMethod : "Local Register Form"
         })
         await newUser.save()
         res.status(201).json({msg : 'Registraion Success |Login',status : true})
@@ -158,5 +158,29 @@ routes.get("/upgradePremium",async(req,res)=>{
     )
     const newjwtToken = jwt.sign({Email : Email ,Name : Name , subscriptionTier : "Premium"},process.env.SECRET_KEY)
     res.json({msg : "Premium Subscription upgraded", newjwtToken : newjwtToken,Name : Name,Email :Email,subscriptionTier : "Premium"})
+})
+routes.post("/googleAuth",async(req,res)=>{
+    const {googleJwt} = req.body
+    const decodedData = jwt.decode(googleJwt)
+    const {email,name,picture} = decodedData
+    const doesEmailExistResult = await checkIfUserExist(email)
+    if(doesEmailExistResult.status){
+        const { Email,Name,subscriptionStatus,profilePhoto} = doesEmailExistResult.dataResponse[0]
+        const jwtToken =  jwt.sign({Email : Email,Name : Name,subscriptionTier : subscriptionStatus},process.env.SECRET_KEY)
+        res.status(201).json( {status : true,Name :name,subscriptionTier :subscriptionStatus,jwtToken,profilePhoto})
+    }else{
+        const newUser = await userModel.create({
+            Name: name,
+            Email : email,
+            Password : "Open id ,OAuth2",
+            subscriptionStatus : 'Free',
+            authMethod : " Google OAuth2",
+            profilePhoto : picture
+        })
+        await newUser.save()
+        const jwtToken =  jwt.sign({Email : email,Name : name,subscriptionTier : "Free"},process.env.SECRET_KEY)
+        res.status(201).json( {status : true,Name :name,subscriptionTier :"Free",jwtToken,profilePhoto: picture})
+    }
+    console.log(decodedData)
 })
 module.exports = routes

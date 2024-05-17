@@ -67,17 +67,17 @@ export default function Register(){
         
     }
     return(
-        <div className="registerForm AuthForms">
-            <h3 className="formTitle">Register</h3>
+        <div className="flex flex-col p-2 bg-green-400 rounded-md">
+            <h3 className="text-2xl text-white font-bold">Register</h3>
             {showPasswordNotMatchingMsg && <h4 style={{padding : 10,borderRadius : 5, textAlign :'center',background :'white' ,color : 'red',position :'absolute',top : 20,right :20}}>Password not Matching</h4>}
-            <input type="text" placeholder="Enter your Name" className="inputField" onChange={(e)=>setName(e.target.value)}/>
-            <input type="text" placeholder="Enter your Email" className="inputField" onChange={(e)=>setEmail(e.target.value)}/>
-            <input type="password" placeholder="Enter your password" className="inputField" onChange={e=>setPassword(e.target.value)}/>
-            <input type="password" placeholder=" password Again" className="inputField" onChange={e=>setPasswordAgain(e.target.value)}/>
-            <button className="sendAuthDetailsButton primary" onClick={registionBtnHandler}>register</button>
-            <p className="forgotPasswordLink">Forgot password</p>
-            <p className="infoText">already have and account ?</p>
-            <button className="sendAuthDetailsButton secondary" onClick={showLoginFormHandler}>Login</button>
+            <input type="text" placeholder="Enter your Name" className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={(e)=>setName(e.target.value)}/>
+            <input type="text" placeholder="Enter your Email" className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={(e)=>setEmail(e.target.value)}/>
+            <input type="password" placeholder="Enter your password" className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={e=>setPassword(e.target.value)}/>
+            <input type="password" placeholder=" password Again"  className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={e=>setPasswordAgain(e.target.value)}/>
+            <button className="p-2 bg-blue-700 text-white self-center rounded-xl" onClick={registionBtnHandler}>register</button>
+            <p className="w-full text-white text-xs italic text-right">Forgot password</p>
+            <p className="text-sm text-white">already have and account ?</p>
+            <button className="p-2 bg-yellow-700 text-white self-center rounded-lg" onClick={showLoginFormHandler}>Login</button>
             {showErrorMsg && <ErrorMessage message={errorMsg} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closesErrorMsgHandler}>X</button>}/>}
             {showSuccessMsg && <SuccessMessage message={successMessage} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closeSuccessMsgHandler}>X</button>}/> }
         </div>

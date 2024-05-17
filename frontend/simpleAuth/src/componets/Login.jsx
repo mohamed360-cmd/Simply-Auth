@@ -1,4 +1,3 @@
-import "./Auth.css"
 import dotenv from 'dotenv'
 import { useState,useContext } from "react"
 import ErrorMessage from "./Notifications/Error"
@@ -69,15 +68,14 @@ export default function Login(){
         
     }
     return(
-        <div className="loginForm AuthForms">
-        <h3 className="formTitle">Login</h3>
-            <input type="text" placeholder="Enter your Email" className="inputField" onChange={(e)=>setEmail(e.target.value)}/>
-            <input type="password" placeholder="Enter your password" className="inputField" onChange={e=>setPassword(e.target.value)}/>
-            <button className="sendAuthDetailsButton primary" onClick={loginbtnHandler}>Login</button>
-            <p className="forgotPasswordLink">Forgot password</p>
-            <p className="infoText">Dont have and account ?</p>
-            {enableLoginBtn && <button className="sendAuthDetailsButton secondary"  enabled onClick={showregisterFormHandler}>Register</button> }
-            {!enableLoginBtn && <button className="sendAuthDetailsButton secondary" disabled onClick={showregisterFormHandler}>Register</button> }
+        <div className="flex flex-col p-2 bg-green-400 rounded-md">
+        <h3 className="text-2xl text-white font-bold">Login</h3>
+            <input type="text" placeholder="Enter your Email" className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={(e)=>setEmail(e.target.value)}/>
+            <input type="password" placeholder="Enter your password" className="p-2 rounded-md placeholder-black font-bold mb-2" onChange={e=>setPassword(e.target.value)}/>
+            <button className="p-2 bg-blue-700 text-white self-center rounded-xl" onClick={loginbtnHandler}>Login</button>
+            <p className="w-full text-white text-xs italic text-right">Forgot password</p>
+            <p className="text-sm text-white">Dont have and account ?</p>
+             <button className="p-2 bg-yellow-700 text-white self-center rounded-lg"   onClick={showregisterFormHandler}>Register</button> 
             {showErrorMsg && <ErrorMessage message={errorMsg} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closesErrorMsgHandler}>X</button>}/>}
             {showSuccessMsg && <SuccessMessage message={successMessage} action={<button style={{border:'none',borderRadius:50,height:20, width:20, backgroundColor:'black', color:'white'}} onClick={closeSuccessMsgHandler}>X</button>}/> }
 

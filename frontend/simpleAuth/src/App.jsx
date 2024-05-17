@@ -9,6 +9,7 @@ export default function App(){
   const [isUserLogedin,setIsUserLogedin] = useState()
   const [userName,setuserName] = useState("")
   const [subscriptionStatus,setSubscriptionStatus] = useState("")
+  const [profilePhoto,setprofilePhoto] = useState(null)
   const chechIfLogedin = ()=>{
     const checkResult =  sessionStorage.getItem("logedin")
     console.log(checkResult)
@@ -18,9 +19,7 @@ export default function App(){
       setIsUserLogedin(checkResult)
     }
   }
-  useEffect(()=>{
-    chechIfLogedin()
-  },[isUserLogedin,subscriptionStatus])
+
   const pageChanger = ()=>{//this function navigates the user to the Home Page if they are loged in n
     if(isUserLogedin){
       navigate("/Home")
@@ -30,9 +29,10 @@ export default function App(){
   }
   useEffect(()=>{
     pageChanger()
-  },[isUserLogedin])
+    chechIfLogedin()
+  },[isUserLogedin,subscriptionStatus])
   return (
-    <UserContext.Provider value={[setIsUserLogedin,isUserLogedin]}>
+    <UserContext.Provider value={[setIsUserLogedin,isUserLogedin,profilePhoto,setprofilePhoto,setSubscriptionStatus]}>
     <Routes>
       <Route path="/" element={<MainAuth />}/>
       <Route path="/Home" element={<Home />}/>
